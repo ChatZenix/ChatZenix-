@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChatZenix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1b1b1b, #000000);
+        }
+
+        .parallax {
+            height: 100vh;
+            background-attachment: fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #363636, #2c2c2c);
+        }
+
+        .top-bar {
+            background: #000;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 40px;
+            left: 0;
+            background: #333;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        #search {
+            border: none;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 10px;
+        }
+
+        .menu-icon {
+            cursor: pointer;
+            display: block;
+            font-size: 24px;
+        }
+
+        .blue-button {
+            background: blue;
+            color: white;
+            border: none;
+            padding: 4px 9px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .footer {
+            background: black;
+            color: white;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .centered-button {
+            text-align: center;
+            padding-top: 5em;
+        }
+
+        .white-screen {
+            background: white;
+            color: black;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .black-screen {
+            background: black;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* Styling the navigation bar and logo with CSS */
+        .navbar {
+            background: #000;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        .search-results {
+            background: white;
+            padding: 9px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 15px;
+            max-width: 70%; /* Reduce maximum width */
+            margin: 0 auto; /* Center-align search results */
+        }
+
+        .search-results h2 {
+            font-size: 16px; /* Reduce font size for heading */
+        }
+
+        .search-results ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .search-results ul li {
+            font-size: 14px; /* Reduce font size for list items */
+            margin-bottom: 5px; /* Add spacing between items */
+        }
+
+        /* Media query for responsive design */
+        @media (max-width: 768px) {
+            .menu {
+                display: none; /* Hide menu by default on mobile screens */
+            }
+            .menu.active {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+        <div class="menu">
+            <a href="#home">Home</a>
+            <a href="chat_eva.html">Chat</a>
+            <a href="about.html">About</a>
+            <a href="Avatar.html">Avatar</a>
+        </div>
+        <input type="text" id="search" placeholder="Search...">
+        <button class="blue-button" onclick="startSearch()">Search</button>
+    </div>
+
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <a href="#home">Home</a>
+        <a href="about.html">About</a>
+    </div>
+
+    <!-- START CHAT button -->
+    <div class="parallax">
+        <div class="centered-button">
+           <!-- START CHAT button with a link to chat.html -->
+<div class="centered-button">
+    <a href="Avatar.html">
+        <button class="blue-button">START CHAT</button>
+    </a>
+</div>
+
+        </div>
+    </div>
+
+    <!-- White Page for Writing Paragraph -->
+    <div class="white-screen">
+        <br><br><br><br><br>
+        <p><h1>ChatZenix: Free Open-Source Chatbot Service</h1>
+
+ChatZenix is your cost-effective open-source chatbot solution. Enhance customer interactions, streamline support, boost sales, and improve SEO with AI chatbots. Get started today!
+</p>
+    </div>
+
+    <!-- ©2023 Section -->
+    <div class="black-screen">
+        <p>&copy;2023</p>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var menu = document.querySelector(".menu");
+            menu.classList.toggle("active");
+        }
+
+        function startChat() {
+            // Your logic for starting a chat goes here
+        }
+
+        function startSearch() {
+            var searchTerm = document.getElementById("search").value.toLowerCase();
+            var paragraphs = document.getElementsByTagName("p");
+
+            var results = document.getElementById("searchResults");
+            results.innerHTML = ''; // Clear previous results
+
+            for (var i = 0; i < paragraphs.length; i++) {
+                var paragraph = paragraphs[i];
+                var text = paragraph.textContent.toLowerCase();
+
+                if (text.includes(searchTerm)) {
+                    var listItem = document.createElement("li");
+                    listItem.textContent = text;
+                    results.appendChild(listItem);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
