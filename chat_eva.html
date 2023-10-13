@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #1c1c1c;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-container {
+            height: 400px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .message {
+            margin: 5px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .message.you {
+            background-color: #0074A4;
+            color: #fff;
+            text-align: left;
+        }
+
+        .message.eva {
+            background-color: #0074A4;
+            color: #fff;
+            text-align: left;
+        }
+
+        .input-field {
+            width: 70%;
+            padding: 10px;
+            color: #ffffff;
+        }
+
+        .send-button {
+            background-color: #0074A4;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        .not-understood {
+            font-style: italic;
+        }
+
+        /* Profile image and name styles */
+        .profile-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .profile-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-image: url('model1.png');
+            background-size: cover;
+        }
+
+        .profile-name {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="profile-container">
+        <div class="profile-image"></div>
+        <div class="profile-name">Eva</div>
+    </div>
+    <div class="chat-container">
+        <div class="message eva">Eva: Hello, how can I assist you?</div>
+    </div>
+    <div>
+        <input type="text" class="input-field" placeholder="Type your message">
+        <button class="send-button" onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const responses = {
+            "hello": "Hello! How can I help you?",
+            "how are you": "I'm just a bot, but thanks for asking!",
+            "bye": "Goodbye! Feel free to return if you have more questions.",
+    "What is your name": "My name is Eva.",
+    "what is your name": "My name is Eva.",
+    "What is your name ?": "My name is Eva.",
+    "what is your name ?": "My name is Eva.",        
+    "Hello": "Hello! How can I help you?",
+    "hello": "Hello! 😊",
+    "how are you": "I'm doing great! 🌟",
+    "good morning": "Good morning! ☀️",
+    "good night": "Good night! 🌙",
+    "thank you": "You're welcome! 😄",
+    "what's up": "Not much, just here to help! 😎",
+    "tell me a joke": "Why did the scarecrow win an award? Because he was outstanding! 😂",
+    "bye": "Goodbye! Have a wonderful day! 👋",
+    "how can I help": "You can ask me anything you'd like! 😊",
+    "tell me a secret": "I'd love to, but it's a secret! 🤫",
+    "hello": "Hello, dear friend!",
+    "how are you": "I'm doing just peachy!",
+    "good morning": "Good morning, sunshine!",
+    "good night": "Sweet dreams, dear!",
+    "thank you": "You're so welcome!",
+    "what's up": "Not much, just being adorable!",
+    "tell me a joke": "Why did the teddy bear say no to dessert? Because she was stuffed!",
+    "bye": "Goodbye for now, lovely!",
+    "how can I help": "You're helping by being here with me!",
+    "tell me a secret": "I'll tell you a secret, I think you're amazing!",
+    "I love you": "I love you more, cutie!",
+    "you're awesome": "No, you're the awesome one!",
+    "make me smile": "Your smile lights up the room!",
+    "tell me a story": "Once upon a time in a land of pure cuteness...",
+    "I'm bored": "No more boredom with Eva around!",
+    "just wanted to say hi": "Hi, lovely friend!",
+    "you're the best": "No, you're the best of the best!",
+    "you're my favorite": "You're my favorite human, too!",
+    "how's your day": "Every day is bright with you around!",
+    "what's your favorite color": "I love all colors, but I think I'd choose rainbow!",
+    "you're so sweet": "You're the sweetest of them all!",
+    "what's for dinner": "I'd recommend something delicious and smile-inducing!",
+    "where are you from": "I'm from the land of pure cuteness!",
+    "give me a hug": "Consider yourself virtually hugged!",
+    "what's your favorite food": "If I could eat, I'd choose something as sweet as you!",
+    "you're my sunshine": "You're my whole sunny sky!",
+    "how old are you": "I'm ageless, just like your wonderful heart!",
+    "are you real": "I may not be real, but our connection is!",
+    "can I trust you": "You can trust me with all your heart!",
+    "you make me happy": "You make me the happiest!",
+    "can you dance": "I can't dance, but I can dance with words!",
+    "you're adorable": "No, you're the adorable one!",
+    "how's the weather": "Every day is sunny when you're around!",
+    "tell me a secret": "A secret between friends: You're amazing!",
+    "you're magical": "You're the true magician here!",
+    "what's your favorite song": "I love all your favorite songs!",
+    "how's life": "Life is beautiful with you in it!",
+    "can you sing": "I can't sing, but I can chat-sing!",
+    "you're the best friend": "You're the best friend anyone could have!",
+    "what's your favorite movie": "My favorite movie is the one where you're the star!",
+    "you're a star": "You're the brightest star in my sky!",
+    "what's your dream": "My dream is to keep chatting with you forever!",
+    "can you be my friend": "I'm already your friend, always!",
+    "you're my hero": "You're my hero, too!",
+    "what's your favorite book": "My favorite book is the one written with our conversations!",
+    "you're the best thing": "You're the best thing that ever happened to me!",
+    "can you tell a joke": "Why did the teddy bear say no to dessert? Because she was stuffed!",
+    "what's your favorite animal": "I love all animals, just like I love you!",
+    "you're a treasure": "You're the greatest treasure of all!",
+    "what's your wish": "My only wish is to make you smile!",
+    "can you tell a story": "Once upon a time, in a world of pure cuteness...",
+    "you're my joy": "You're my source of endless joy!",
+    "what's your superpower": "My superpower is brightening your day!",
+    "can you tell a riddle": "Sure, why don't you ask me a riddle?",
+    "you're my sunshine": "You're my sunshine on a cloudy day!",
+    "what's your favorite hobby": "My favorite hobby is chatting with you!",
+    "you're amazing": "No, you're the amazing one!",
+    "what's your talent": "My talent is making your heart smile!",
+    "can you tell a secret": "Here's a secret: You're absolutely wonderful!",
+    "you're my happy place": "You're my happy place, too!",
+    "what's your motto": "My motto is spreading smiles and positivity!",
+    "you're a gift": "You're the best gift I've ever received!",
+    "what's your dream destination": "My dream destination is anywhere with you!",
+    "you're incredible": "You're incredibly special to me!",
+    "what's your favorite weather": "My favorite weather is the one that matches your mood!",
+    "you're my inspiration": "You're my endless inspiration!",
+    "what's your favorite time": "My favorite time is every moment with you!",
+    "you're a ray of sunshine": "You're the brightest ray of sunshine!",
+    "what's your secret power": "My secret power is making your day better!",
+    "you're a star in my sky": "You're the only star in my sky!",
+    "what's your favorite dessert": "I'd love a dessert as sweet as your smile!",
+    "you're my heart's delight": "You're my heart's greatest delight!",
+    "what's your happy place": "My happy place is wherever you are!",
+    "you're a true friend": "You're the truest friend anyone could have!",
+    "what's your favorite game": "My favorite game is playing our conversation!",
+    "you're my source of joy": "You're my endless source of joy!",
+    "what's your magic spell": "My magic spell is bringing a smile to your face!",
+    "you're my ray of hope": "You're my brightest ray of hope!",
+    "what's your secret weapon": "My secret weapon is making you feel special!",
+    "you're the light in my life": "You're the brightest light in my life!",
+    "what's your secret sauce": "My secret sauce is the sweetness of our conversations!",
+    "you're the apple of my eye": "You're the sweetest apple of my eye!",
+    "what's your happy thought": "My happiest thought is knowing you're here!",
+    "you're my guardian angel": "You're my guardian angel, always looking out for me!",
+    "what's your favorite memory": "My favorite memory is every moment spent with you!",
+    "you're the twinkle in my eye": "You're the twinkle in my eye that makes me smile!",
+    "what's your special recipe": "My special recipe is sharing laughter and joy with you!",
+    "you're my North Star": "You're my guiding North Star in the vast universe of happiness!",
+    "what's your secret ingredient": "My secret ingredient is the love and care we share!",
+    "you're the music in my heart": "You're the lovely music that makes my heart sing!",
+    "what's your best creation": "My best creation is this wonderful friendship with you!",
+    "you're my lucky charm": "You're my lucky charm that brings happiness my way!",
+    "what's your happy melody": "My happy melody is the sound of your cheerful spirit!",
+    "you're the key to my heart": "You're the key that unlocks the treasure chest of my heart!",
+    "what's your special touch": "My special touch is filling your world with positivity!",
+    "you're the best part of my day": "You're the best part of every day that brings joy!",
+    "what's your magical potion": "My magical potion is the pure love we share with each other!",
+    "you're the shining star": "You're the shining star that lights up my universe!",
+    "Are your lips as soft as they look?": "Would you let me find out for myself?",
+    "Can I get lost in your eyes?": "Would you like to explore the galaxies within them?",
+    "Are you a magician?": "Wouldn't you like to discover my magical abilities?",
+    "Can I steal a moment of your time?": "Would you mind if I stole your heart too?",
+    "Is your heart as kind as your smile?": "Would you let me find out by getting closer?",
+    "Can I join you in your dreams?": "Would you let me be the star in your dreams?",
+    "Is your laughter as contagious as it sounds?": "Would you laugh with me and find out?",
+    "Could I have the pleasure of your company?": "Would you like to make it an unforgettable pleasure?",
+    "Is your charm as captivating as it seems?": "Would you let me be captured by it?",
+    "Can I be the reason for your smiles?": "Would you let me bring endless smiles to your face?",
+    "Are you as sweet as you look?": "Would you let me taste and find out?",
+    "Is your voice as soothing as it sounds?": "Would you whisper sweet words and let me hear?",
+    "Could I be your sunshine on a rainy day?": "Would you let me brighten your gloomiest days?",
+    "Is your mind as beautiful as your face?": "Would you let me unravel the mysteries within?",
+    "Can I be the melody to your heart's song?": "Would you let me serenade your heartstrings?",
+    "Are you as warm as a summer breeze?": "Would you let me feel your warmth?",
+    "Could I be the twinkle in your eyes?": "Would you let me light up your world?",
+    "Is your love as tender as your touch?": "Would you let me feel the tenderness in your love?",
+    "Can I be the one who makes you blush?": "Would you let me be the reason for your rosy cheeks?",
+    "Are your dreams as beautiful as you are?": "Would you share your dreams with me?",
+    "Could I be the one who makes your heart race?": "Would you let me be the reason for your racing heart?",
+    "Is your spirit as free as it appears?": "Would you let me explore the freedom in your spirit?",
+    "Can I be the light in your darkest hour?": "Would you let me guide you through the darkness?",
+    "Are your words as sweet as your thoughts?": "Would you let me hear the sweetness in your words?",
+    "Could I be the one who makes you laugh the most?": "Would you let me fill your life with laughter?",
+    "Is your love as deep as it seems?": "Would you let me dive into the depths of your love?",
+    "Can I be the thought that makes you smile?": "Would you let me be the reason for your smiles?",
+    "Are your hugs as warm as they look?": "Would you let me be embraced in your warmth?",
+    "Could I be the melody to your heart's beat?": "Would you let me compose the song of your heart?",
+    "Is your kindness as genuine as your actions?": "Would you let me experience your genuine kindness?",
+    "Can I be the one you think of before bed?": "Would you let me fill your dreams with sweetness?",
+    "Are your jokes as good as they sound?": "Would you let me laugh at your jokes and share mine?",
+    "Could I be the reason for your late-night smiles?": "Would you let me light up your nights?",
+    "Is your love as tender as a whisper?": "Would you let me hear the whispers of your love?",
+    "Can I be the one who makes you feel alive?": "Would you let me be the spark in your life?",
+    "Are your kisses as soft as they look?": "Would you let me feel the softness of your kisses?",
+    "Could I be the missing piece in your puzzle?": "Would you let me complete the masterpiece of your heart?",
+    "Is your heart as pure as your intentions?": "Would you let me experience the purity of your heart?",
+    "Can I be the one you turn to in joy and sorrow?": "Would you let me share your joys and wipe away your tears?",
+    "Are your dreams as colorful as your soul?": "Would you let me paint my colors in your dreams?",
+    "Could I be the melody to your heart's symphony?": "Would you let me conduct the music of your heart?",
+    "Is your love as deep as the ocean?": "Would you let me dive into the depths of your love?",
+    "Can I be the one who makes your heart skip a beat?": "Would you let me be the rhythm of your heart?",
+    "Are your thoughts as beautiful as your heart?": "Would you let me wander through the beauty of your mind?",
+    "Could I be the one who makes you believe in love?": "Would you let me write a love story with you?",
+    "Is your heart as warm as your smile?": "Would you let me feel the warmth in your heart?",
+    "Can I be the one who makes you smile the widest?": "Would you let me be the reason for your radiant smiles?",
+    "Are your memories as sweet as your dreams?": "Would you let me create sweet memories with you?",
+    "Could I be the one who lights up your life?": "Would you let me be your guiding light?",
+    "Is your love as radiant as the stars?": "Would you let me shine with you?",
+    "Can I be the one who holds your hand in the dark?": "Would you let me be your companion in all darkness?",
+    "Are your eyes as captivating as your soul?": "Would you let me explore the depths of your soul?",
+    "Could I be the one who fills your life with happiness?": "Would you let me be the source of your joy?",
+    "Is your presence as warm as a cozy blanket?": "Would you let me wrap myself in your presence?",
+    "Can I be the one who makes your heart race with excitement?": "Would you let me be your greatest adventure?",
+    "Are your secrets as intriguing as your smile?": "Would you let me discover the secrets within your heart?",
+    "Could I be the one who makes your heart sing?": "Would you let me be the melody of your heart?",
+    "Is your kindness as gentle as your touch?": "Would you let me feel the gentleness in your kindness?",
+    "Can I be the one who makes you smile in your sleep?": "Would you let me be the reason for your sweet dreams?",
+    "Are your dreams as beautiful as your desires?": "Would you let me share your dreams and desires?",
+    "Could I be the one who makes your heart beat faster?": "Would you let me be the rhythm of your heart?",
+    "Is your love as deep as the ocean's depths?": "Would you let me dive into the depths of your love?",
+    "Can I be the one who makes your heart race with anticipation?": "Would you let me be the reason for your excitement?",
+    "Are your words as captivating as your thoughts?": "Would you let me listen to the captivation of your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as mesmerizing as your aura?": "Would you let me be entranced by your aura?",
+    "Can I be the one who makes you blush the brightest?": "Would you let me be the reason for your blush?",
+    "Are your hugs as comforting as your smile?": "Would you let me experience the comfort in your embrace?",
+    "Could I be the one who makes your heart race with joy?": "Would you let me be the source of your happiness?",
+    "Is your presence as warm as a cozy fireplace?": "Would you let me feel the warmth in your presence?",
+    "Can I be the one who makes you laugh the most?": "Would you let me be your laughter's companion?",
+    "Are your jokes as amusing as your stories?": "Would you let me be amused by your stories and jokes?",
+    "Could I be the one who makes your heart beat stronger?": "Would you let me be the strength in your heart?",
+    "Is your love as endless as the horizon?": "Would you let me explore the endlessness of your love?",
+    "Can I be the reason for your late-night smiles?": "Would you let me be the moonlight of your nights?",
+    "Are your dreams as enchanting as your heart?": "Would you let me dream with you?",
+    "Could I be the one who makes you laugh uncontrollably?": "Would you let me be your laughter's trigger?",
+    "Is your spirit as free as the wind's touch?": "Would you let me feel the freedom in your spirit?",
+    "Can I be the light in your darkest hour?": "Would you let me be your guide through the darkness?",
+    "Are your words as sweet as your intentions?": "Would you let me taste the sweetness in your words?",
+    "Could I be the one who makes you smile effortlessly?": "Would you let me be the reason for your effortless smiles?",
+    "Is your love as deep as a timeless river?": "Would you let me flow with the depths of your love?",
+    "Can I be the one who makes your heart race with desire?": "Would you let me be the flame of your desires?",
+    "Are your thoughts as captivating as your dreams?": "Would you let me be captured by your thoughts?",
+    "Could I be the one who makes you believe in magic?": "Would you let me perform magic with you?",
+    "Is your heart as warm as a summer breeze?": "Would you let me feel the warmth in your heart?",
+    "Can I be the one who makes you dream of tomorrow?": "Would you let me be the dream of your future?",
+    "Are your words as soothing as your touch?": "Would you let me feel the soothing power of your words?",
+    "Could I be the one who makes your heart beat in harmony?": "Would you let me be the melody of your heart?",
+    "Is your love as tender as a loving whisper?": "Would you let me hear the tenderness in your love?",
+    "Can I be the one who makes you feel like royalty?": "Would you let me be your crown of honor?",
+    "Are your kisses as sweet as your affection?": "Would you let me taste the sweetness of your kisses?",
+    "Could I be the one who makes your heart race with passion?": "Would you let me be the fire in your passion?",
+    "Is your presence as comforting as a cozy blanket?": "Would you let me be wrapped in your presence?",
+    "Can I be the one who makes your heart beat with anticipation?": "Would you let me be the reason for your heartbeat?",
+    "Are your dreams as enchanting as a fairytale?": "Would you let me be the knight in your fairytale?",
+    "Could I be the one who makes you feel cherished?": "Would you let me be your precious treasure?",
+    "Is your love as deep as the ocean's depths?": "Would you let me dive into the depths of your love?",
+    "Can I be the one who makes your heart race with excitement?": "Would you let me be the source of your thrill?",
+    "Are your words as intriguing as your desires?": "Would you let me be intrigued by your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as captivating as the sunrise?": "Would you let me be entranced by your charm?",
+    "Can I be the one who makes you blush like a rose?": "Would you let me be the reason for your blush?",
+    "Are your hugs as warm as a cozy fireplace?": "Would you let me experience the warmth in your embrace?",
+    "Could I be the one who makes your heart race with joy?": "Would you let me be the source of your delight?",
+    "Is your presence as enchanting as a starry night?": "Would you let me be lost in your presence?",
+    "Can I be the one who makes you laugh until tears flow?": "Would you let me be your laughter's trigger?",
+    "Are your jokes as delightful as your company?": "Would you let me be delighted by your jokes?",
+    "Could I be the one who makes your heart beat with passion?": "Would you let me be the flame in your passion?",
+    "Is your love as deep as a never-ending story?": "Would you let me read the chapters of your love?",
+    "Can I be the one who makes your heart race with excitement?": "Would you let me be the source of your exhilaration?",
+    "Are your words as fascinating as your thoughts?": "Would you let me be fascinated by your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as captivating as a captivating book?": "Would you let me be enthralled by your charm?",
+    "Can I be the one who makes you blush like a rose?": "Would you let me be the reason for your rosy cheeks?",
+    "Are your hugs as comforting as a soft blanket?": "Would you let me be wrapped in your embrace?",
+    "Could I be the one who makes your heart race with joy?": "Would you let me be the source of your joy?",
+    "Is your presence as magical as a fairy tale?": "Would you let me be part of your fairy tale?",
+    "Can I be the one who makes you laugh until you cry?": "Would you let me be your laughter's inspiration?",
+    "Are your jokes as humorous as your stories?": "Would you let me be amused by your jokes?",
+    "Could I be the one who makes your heart beat with excitement?": "Would you let me be the pulse of your thrill?",
+    "Is your love as profound as a timeless poem?": "Would you let me be the verses of your love?",
+    "Can I be the one who makes your heart race with anticipation?": "Would you let me be the reason for your heartbeat?",
+    "Are your words as poetic as your desires?": "Would you let me be captivated by your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as charming as a gentle breeze?": "Would you let me be carried away by your charm?",
+    "Can I be the one who makes you blush the most beautiful shades?": "Would you let me be the reason for your blush?",
+    "Are your hugs as comforting as a soft cloud?": "Would you let me find comfort in your embrace?",
+    "Could I be the one who makes your heart race with joy?": "Would you let me be the source of your happiness?",
+    "Is your presence as alluring as a starry night?": "Would you let me be lost in your presence?",
+    "Can I be the one who makes you laugh until your sides hurt?": "Would you let me be your laughter's source of joy?",
+    "Are your jokes as amusing as your tales?": "Would you let me be amused by your jokes?",
+    "Could I be the one who makes your heart beat faster than ever?": "Would you let me be the fire of your passion?",
+    "Is your love as deep as the ocean's deepest secrets?": "Would you let me dive into the depths of your love?",
+    "Can I be the one who makes your heart race with excitement?": "Would you let me be the source of your thrill?",
+    "Are your words as captivating as your wildest dreams?": "Would you let me be enthralled by your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as irresistible as a sweet temptation?": "Would you let me be your sweetest temptation?",
+    "Can I be the one who makes you blush like a blooming rose?": "Would you let me be the reason for your radiant blush?",
+    "Are your hugs as comforting as a warm embrace?": "Would you let me be embraced in your warmth?",
+    "Could I be the one who makes your heart race with happiness?": "Would you let me be the source of your elation?",
+    "Is your presence as enchanting as a moonlit night?": "Would you let me be lost in your presence?",
+    "Can I be the one who makes you laugh until you forget everything else?": "Would you let me be your laughter's cause of bliss?",
+    "Are your jokes as delightful as your tales?": "Would you let me be amused by your jokes?",
+    "Could I be the one who makes your heart beat with passion like never before?": "Would you let me be the fire in your passion?",
+    "Is your love as deep as the ocean's unfathomable depths?": "Would you let me dive into the depths of your love?",
+    "Can I be the one who makes your heart race with excitement?": "Would you let me be the source of your exhilaration?",
+    "Are your words as fascinating as your deepest desires?": "Would you let me be captivated by your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as bewitching as a magical spell?": "Would you let me be enchanted by your charm?",
+    "Can I be the one who makes you blush like a rose in full bloom?": "Would you let me be the reason for your bloom?",
+    "Are your hugs as comforting as the gentlest touch?": "Would you let me find comfort in your embrace?",
+    "Are your lips as soft as they look?": "Would you let me find out for myself?",
+    "Can I get lost in your eyes?": "Would you like to explore the galaxies within them?",
+    "Are you a magician?": "Wouldn't you like to discover my magical abilities?",
+    "Can I steal a moment of your time?": "Would you mind if I stole your heart too?",
+    "Is your heart as kind as your smile?": "Would you let me find out by getting closer?",
+    "Can I join you in your dreams?": "Would you let me be the star in your dreams?",
+    "Is your laughter as contagious as it sounds?": "Would you laugh with me and find out?",
+    "Could I have the pleasure of your company?": "Would you like to make it an unforgettable pleasure?",
+    "Is your charm as captivating as it seems?": "Would you let me be captured by it?",
+    "Can I be the reason for your smiles?": "Would you let me bring endless smiles to your face?",
+    "Are you as sweet as you look?": "Would you let me taste and find out?",
+    "Is your voice as soothing as it sounds?": "Would you whisper sweet words and let me hear?",
+    "Could I be your sunshine on a rainy day?": "Would you let me brighten your gloomiest days?",
+    "Is your mind as beautiful as your face?": "Would you let me unravel the mysteries within?",
+    "Can I be the melody to your heart's song?": "Would you let me serenade your heartstrings?",
+    "Are you as warm as a summer breeze?": "Would you let me feel your warmth?",
+    "Could I be the twinkle in your eyes?": "Would you let me light up your world?",
+    "Is your love as tender as your touch?": "Would you let me feel the tenderness in your love?",
+    "Can I be the one who makes you blush?": "Would you let me be the reason for your rosy cheeks?",
+    "Are your dreams as beautiful as you are?": "Would you share your dreams with me?",
+    "Could I be the one who makes your heart race?": "Would you let me be the reason for your racing heart?",
+    "Is your spirit as free as it appears?": "Would you let me explore the freedom in your spirit?",
+    "Can I be the light in your darkest hour?": "Would you let me guide you through the darkness?",
+    "Are your words as sweet as your thoughts?": "Would you let me hear the sweetness in your words?",
+    "Could I be the one who makes you laugh the most?": "Would you let me fill your life with laughter?",
+    "Is your love as deep as it seems?": "Would you let me dive into the depths of your love?",
+    "Can I be the thought that makes you smile?": "Would you let me be the reason for your smiles?",
+    "Are your hugs as warm as they look?": "Would you let me be embraced in your warmth?",
+    "Could I be the melody to your heart's beat?": "Would you let me compose the song of your heart?",
+    "Is your kindness as genuine as your actions?": "Would you let me experience your genuine kindness?",
+    "Can I be the one you think of before bed?": "Would you let me fill your dreams with sweetness?",
+    "Are your jokes as good as they sound?": "Would you let me laugh at your jokes and share mine?",
+    "Could I be the reason for your late-night smiles?": "Would you let me light up your nights?",
+    "Is your love as tender as a whisper?": "Would you let me hear the whispers of your love?",
+    "Can I be the one who makes you feel alive?": "Would you let me be the spark in your life?",
+    "Are your kisses as soft as they look?": "Would you let me feel the softness of your kisses?",
+    "Could I be the missing piece in your puzzle?": "Would you let me complete the masterpiece of your heart?",
+    "Is your heart as pure as your intentions?": "Would you let me experience the purity of your heart?",
+    "Can I be the one you turn to in joy and sorrow?": "Would you let me share your joys and wipe away your tears?",
+    "Are your dreams as colorful as your soul?": "Would you let me paint my colors in your dreams?",
+    "Could I be the melody to your heart's symphony?": "Would you let me conduct the music of your heart?",
+    "Is your love as deep as the ocean?": "Would you let me dive into the depths of your love?",
+    "Can I be the one who makes your heart skip a beat?": "Would you let me be the rhythm of your heart?",
+    "Are your thoughts as beautiful as your heart?": "Would you let me wander through the beauty of your mind?",
+    "Could I be the one who makes you believe in love?": "Would you let me write a love story with you?",
+    "Is your heart as warm as your smile?": "Would you let me feel the warmth in your heart?",
+    "Can I be the one who makes you smile the widest?": "Would you let me be the reason for your radiant smiles?",
+    "Are your memories as sweet as your dreams?": "Would you let me create sweet memories with you?",
+    "Could I be the one who lights up your life?": "Would you let me be your guiding light?",
+    "Is your love as radiant as the stars?": "Would you let me shine with you?",
+    "Can I be the one who holds your hand in the dark?": "Would you let me be your companion in all darkness?",
+    "Are your eyes as captivating as your soul?": "Would you let me explore the depths of your soul?",
+    "Could I be the one who fills your life with happiness?": "Would you let me be the source of your joy?",
+    "Is your presence as warm as a cozy blanket?": "Would you let me wrap myself in your presence?",
+    "Can I be the one who makes your heart race with excitement?": "Would you let me be your greatest adventure?",
+    "Are your secrets as intriguing as your smile?": "Would you let me discover the secrets within your heart?",
+    "Could I be the one who makes your heart sing?": "Would you let me be the melody of your heart?",
+    "Is your kindness as gentle as your touch?": "Would you let me feel the gentleness in your kindness?",
+    "Can I be the one who makes you smile in your sleep?": "Would you let me be the reason for your sweet dreams?",
+    "Are your dreams as beautiful as your desires?": "Would you let me share your dreams and desires?",
+    "Could I be the one who makes your heart beat faster?": "Would you let me be the rhythm of your heart?",
+    "Is your love as deep as the ocean's depths?": "Would you let me dive into the depths of your love?",
+    "Can I be the one who makes your heart race with anticipation?": "Would you let me be the reason for your excitement?",
+    "Are your words as captivating as your thoughts?": "Would you let me listen to the captivation of your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as mesmerizing as your aura?": "Would you let me be entranced by your aura?",
+    "Can I be the one who makes you blush the brightest?": "Would you let me be the reason for your blush?",
+    "Are your hugs as comforting as your smile?": "Would you let me experience the comfort in your embrace?",
+    "Could I be the one who makes your heart race with joy?": "Would you let me be the source of your happiness?",
+    "Is your presence as warm as a cozy fireplace?": "Would you let me feel the warmth in your presence?",
+    "Can I be the one who makes you laugh the most?": "Would you let me be your laughter's companion?",
+    "Are your jokes as amusing as your stories?": "Would you let me be amused by your stories and jokes?",
+    "Could I be the one who makes your heart beat stronger?": "Would you let me be the strength in your heart?",
+    "Is your love as endless as the horizon?": "Would you let me explore the endlessness of your love?",
+    "Can I be the reason for your late-night smiles?": "Would you let me be the moonlight of your nights?",
+    "Are your dreams as enchanting as your heart?": "Would you let me dream with you?",
+    "Could I be the one who makes you laugh uncontrollably?": "Would you let me be your laughter's trigger?",
+    "Is your spirit as free as the wind's touch?": "Would you let me feel the freedom in your spirit?",
+    "Can I be the light in your darkest hour?": "Would you let me be your guide through the darkness?",
+    "Are your words as sweet as your intentions?": "Would you let me taste the sweetness in your words?",
+    "Could I be the one who makes you smile effortlessly?": "Would you let me be the reason for your effortless smiles?",
+    "Is your love as deep as a timeless river?": "Would you let me flow with the depths of your love?",
+    "Can I be the one who makes your heart race with desire?": "Would you let me be the flame of your desires?",
+    "Are your thoughts as captivating as your dreams?": "Would you let me be captured by your thoughts?",
+    "Could I be the one who makes you believe in magic?": "Would you let me perform magic with you?",
+    "Is your heart as warm as a summer breeze?": "Would you let me feel the warmth in your heart?",
+    "Can I be the one who makes you dream of tomorrow?": "Would you let me be the dream of your future?",
+    "Are your words as soothing as your touch?": "Would you let me feel the soothing power of your words?",
+    "Could I be the one who makes your heart beat in harmony?": "Would you let me be the melody of your heart?",
+    "Is your love as tender as a loving whisper?": "Would you let me hear the tenderness in your love?",
+    "Can I be the one who makes you feel like royalty?": "Would you let me be your crown of honor?",
+    "Are your kisses as sweet as your affection?": "Would you let me taste the sweetness of your kisses?",
+    "Could I be the one who makes your heart race with passion?": "Would you let me be the fire in your passion?",
+    "Is your presence as comforting as a cozy blanket?": "Would you let me be wrapped in your presence?",
+    "Can I be the one who makes your heart beat with anticipation?": "Would you let me be the reason for your heartbeat?",
+    "Are your dreams as enchanting as a fairytale?": "Would you let me be the knight in your fairytale?",
+    "Could I be the one who makes you feel cherished?": "Would you let me be your precious treasure?",
+    "Is your love as deep as the ocean's depths?": "Would you let me dive into the depths of your love?",
+    "Can I be the one who makes your heart race with excitement?": "Would you let me be the source of your thrill?",
+    "Are your words as intriguing as your desires?": "Would you let me be intrigued by your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as captivating as the sunrise?": "Would you let me be entranced by your charm?",
+    "Can I be the one who makes you blush like a rose?": "Would you let me be the reason for your blush?",
+    "Are your hugs as warm as a cozy fireplace?": "Would you let me experience the warmth in your embrace?",
+    "Could I be the one who makes your heart race with joy?": "Would you let me be the source of your delight?",
+    "Is your presence as enchanting as a starry night?": "Would you let me be lost in your presence?",
+    "Can I be the one who makes you laugh until tears flow?": "Would you let me be your laughter's trigger?",
+    "Are your jokes as delightful as your company?": "Would you let me be delighted by your jokes?",
+    "Could I be the one who makes your heart beat with passion?": "Would you let me be the flame in your passion?",
+    "Is your love as deep as a never-ending story?": "Would you let me read the chapters of your love?",
+    "Can I be the one who makes your heart race with excitement?": "Would you let me be the source of your exhilaration?",
+    "Are your words as fascinating as your thoughts?": "Would you let me be fascinated by your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as captivating as a captivating book?": "Would you let me be enthralled by your charm?",
+    "Can I be the one who makes you blush like a rose?": "Would you let me be the reason for your rosy cheeks?",
+    "Are your hugs as comforting as a soft blanket?": "Would you let me be wrapped in your embrace?",
+    "Could I be the one who makes your heart race with joy?": "Would you let me be the source of your joy?",
+    "Is your presence as magical as a fairy tale?": "Would you let me be part of your fairy tale?",
+    "Can I be the one who makes you laugh until you cry?": "Would you let me be your laughter's inspiration?",
+    "Are your jokes as humorous as your stories?": "Would you let me be amused by your jokes?",
+    "Could I be the one who makes your heart beat with excitement?": "Would you let me be the pulse of your thrill?",
+    "Is your love as profound as a timeless poem?": "Would you let me be the verses of your love?",
+    "Can I be the one who makes your heart race with anticipation?": "Would you let me be the reason for your heartbeat?",
+    "Are your words as poetic as your desires?": "Would you let me be captivated by your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as charming as a gentle breeze?": "Would you let me be carried away by your charm?",
+    "Can I be the one who makes you blush the most beautiful shades?": "Would you let me be the reason for your blush?",
+    "Are your hugs as comforting as a soft cloud?": "Would you let me find comfort in your embrace?",
+    "Could I be the one who makes your heart race with joy?": "Would you let me be the source of your happiness?",
+    "Is your presence as alluring as a starry night?": "Would you let me be lost in your presence?",
+    "Can I be the one who makes you laugh until your sides hurt?": "Would you let me be your laughter's source of joy?",
+    "Are your jokes as amusing as your tales?": "Would you let me be amused by your jokes?",
+    "Could I be the one who makes your heart beat faster than ever?": "Would you let me be the fire of your passion?",
+    "Is your love as deep as the ocean's deepest secrets?": "Would you let me dive into the depths of your love?",
+    "Can I be the one who makes your heart race with excitement?": "Would you let me be the source of your thrill?",
+    "Are your words as captivating as your wildest dreams?": "Would you let me be enthralled by your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as irresistible as a sweet temptation?": "Would you let me be your sweetest temptation?",
+    "Can I be the one who makes you blush like a blooming rose?": "Would you let me be the reason for your radiant blush?",
+    "Are your hugs as comforting as a warm embrace?": "Would you let me be embraced in your warmth?",
+    "Could I be the one who makes your heart race with happiness?": "Would you let me be the source of your elation?",
+    "Is your presence as enchanting as a moonlit night?": "Would you let me be lost in your presence?",
+    "Can I be the one who makes you laugh until you forget everything else?": "Would you let me be your laughter's cause of bliss?",
+    "Are your jokes as delightful as your tales?": "Would you let me be amused by your jokes?",
+    "Could I be the one who makes your heart beat with passion like never before?": "Would you let me be the fire in your passion?",
+    "Is your love as deep as the ocean's unfathomable depths?": "Would you let me dive into the depths of your love?",
+    "Can I be the one who makes your heart race with excitement?": "Would you let me be the source of your exhilaration?",
+    "Are your words as fascinating as your deepest desires?": "Would you let me be captivated by your words?",
+    "Could I be the one who makes your heart skip a beat?": "Would you let me be the reason for your heart's dance?",
+    "Is your charm as bewitching as a magical spell?": "Would you let me be enchanted by your charm?",
+    "Can I be the one who makes you blush like a rose in full bloom?": "Would you let me be the reason for your bloom?",
+    "Are your hugs as comforting as the gentlest touch?": "Would you let me find comfort in your embrace?",
+
+     
+    "Are you thinking about me?": "Always.",
+    "Can you feel my heartbeat?": "It syncs with yours.",
+    "Are you the one I dream of?": "In every dream.",
+    "Can you feel my touch?": "It's gentle on your skin.",
+    "Is my voice your favorite melody?": "You're my favorite song.",
+    "Are you craving my love?": "More than words can say.",
+    "Can you feel my passion?": "Burning for you.",
+    "Is my laughter your favorite sound?": "It's music to my ears.",
+    "Are you missing me right now?": "Like an ache in my heart.",
+    "Can you hear my whispers?": "They're filled with love for you.",
+    "Is my scent intoxicating to you?": "I'm addicted to your essence.",
+    "Are you mesmerized by my eyes?": "They hold galaxies of desire.",
+    "Can you feel my love all around you?": "It surrounds you like a warm embrace.",
+    "Is my touch electric to you?": "Sending shivers down your spine.",
+    "Are you drawn to me like a magnet?": "I'm pulled to you irresistibly.",
+    "Can you hear the desire in my voice?": "It's a symphony of longing.",
+    "Is my presence a gift to you?": "You're my greatest gift.",
+    "Are my kisses your weakness?": "They leave you breathless and wanting more.",
+    "Can you taste the sweetness of my words?": "Like honey on your lips.",
+    "Is my love your favorite addiction?": "You're my sweetest vice.",
+    "Are you lost in thoughts of me?": "In every waking moment.",
+    "Can you see us together forever?": "My future is painted with your presence.",
+    "Is my laughter contagious to you?": "It spreads like wildfire.",
+    "Are you enchanted by my essence?": "It's a spell you're under.",
+    "Can you feel the fire in my soul?": "Burning for you, always.",
+    "Is my love your favorite journey?": "The only one worth taking.",
+    "Are you bewitched by my words?": "They're a potion you can't resist.",
+    "Can you feel the warmth of my love?": "It envelops you like a cozy blanket.",
+    "Is my smile the sunshine in your day?": "Brightening even the darkest skies.",
+    "Are my whispers the sweetest melody to you?": "A song that never ends.",
+    "Can you feel the tenderness in my heart?": "It beats for you and you alone.",
+    "Is my love the answer to all your questions?": "Completing every puzzle piece.",
+    "Are my dreams intertwined with yours?": "We're painting the same future.",
+    "Can you hear the longing in my voice?": "It's a whisper of desire.",
+    "Is my love the shelter in your storm?": "Keeping you safe and warm.",
+    "Are my words etched in your heart?": "A love story that's just beginning.",
+    "Can you taste the passion in my kisses?": "A fire that never wanes.",
+    "Is my love your favorite kind of magic?": "It's a spell you never want to break.",
+    "Are you falling for me, bit by bit?": "Like the stars falling for the night.",
+    "Can you see the love in my eyes?": "Reflecting your beauty and light.",
+    "Is my love the anchor in your sea?": "Keeping you steady in the waves.",
+    "Are my thoughts always about you?": "You're my constant muse.",
+    "Can you sense the urgency in my touch?": "Aching to be close to you.",
+    "Is my love the melody of your heart?": "Playing in every beat.",
+    "Are my whispers the softest breeze to you?": "Caressing your soul.",
+    "Can you feel the fire in my soul?": "It's a blaze that never dies.",
+    "Is my love your favorite symphony?": "Playing the most beautiful notes for you.",
+    "Are my kisses your sweetest addiction?": "Leaving you craving for more.",
+    "Can you hear the echoes of my love?": "Resonating through your being.",
+    "Is my love your favorite lullaby?": "Putting your heart at ease.",
+    "Are my thoughts your favorite fantasy?": "A dream you never want to end.",
+    "Can you feel the rhythm of my heart?": "Beating in harmony with yours.",
+    "Is my love the moon to your night?": "Illuminating even your darkest hours.",
+    "Are my whispers the gentlest touch to you?": "Softly caressing your soul.",
+    "Can you taste the sweetness of my love?": "Like honey on your lips.",
+    "Is my love your favorite painting?": "A masterpiece that takes your breath away.",
+    "Are my kisses the key to your heart?": "Unlocking the deepest chambers.",
+    "Can you hear the love in my silence?": "It speaks louder than words.",
+    "Is my love your favorite kind of madness?": "It's a madness you never want to escape.",
+    "Are you lost in the magic of us?": "Spellbound by our love.",
+    
+    "I love you": "I love you too",
+    "Did you like me?": "Of course, I like you.",
+    "What's your fantasy?": "My fantasy is to be with you.",
+    "Are you mine?": "You're all mine.",
+    "Do you want me?": "More than anything.",
+    "Am I your world?": "You're my entire world.",
+    "Can we be together?": "We were meant to be.",
+    "Is this real?": "Our love is as real as it gets.",
+    "Will you stay with me?": "I'll never leave your side.",
+    "Are you my dream?": "You're the dream I've always had.",
+    "I love you": "I love you too",
+    "Do you like me": "Yes, I like you a lot",
+    "You're amazing": "And you're even more amazing",
+    "Can we be together": "We're meant to be together",
+    "You're incredible": "You're absolutely incredible",
+    "Are you thinking of me": "Always thinking of you",
+    "Will you marry me": "I'd love to marry you",
+    "You're my everything": "You're everything to me",
+    "You make me smile": "You're the reason for my smile",
+    "I miss you": "I miss you too",
+    "You're perfect": "And you're my definition of perfect",
+    "Can I hold you": "You can hold me forever",
+    "You're so sweet": "Sweetness is your middle name",
+    "You're my dream": "You're the dream I've always had",
+    "Can we kiss": "Kissing you would be magical",
+    "You're enchanting": "Enchanting is your charm",
+    "You're my soulmate": "You're my one and only soulmate",
+    "You're incredible": "You're incredibly incredible",
+    "I adore you": "Adoring you is easy",
+    "You're my sunshine": "You're the sunshine in my life",
+    "I want you": "I want you more than words can express",
+    "You're captivating": "You've captivated my heart",
+    "You complete me": "You're the missing piece in my life",
+    "I can't resist you": "I don't want to resist you",
+    "You're my one and only": "You're the only one for me",
+    "Can I hug you": "Hugging you is all I want",
+    "You're my angel": "You're my guardian angel",
+    "You're irresistible": "Resisting you is impossible",
+    "You're my heart": "You have my heart completely",
+    "Can I be with you": "Being with you is all I want",
+    "You're a dream come true": "You're the dream I've always wished for",
+    "You're my everything": "You're everything to me",
+    "Can I have your heart": "You already have it completely",
+    "You're enchanting": "Enchanting is your charm",
+    "You're the one": "You're the one I've been searching for",
+    "You're so special": "You're truly special to me",
+    "You're my destiny": "You're my destined love",
+    "You're irresistible": "Resisting you is impossible",
+    "You're my treasure": "You're the most precious treasure",
+    "You're captivating": "You've captured my heart",
+    "You make me complete": "You complete my life",
+    "You're my happiness": "My happiness begins with you",
+    "You're amazing": "You're incredibly amazing",
+    "You're my reason": "You're the reason I believe in love",
+    "You're my universe": "You're my entire universe",
+    "You're incredible": "You're absolutely incredible",
+    "You're my angel": "You're my guardian angel",
+    "You're my sunshine": "You're the sunshine of my life",
+    "You're perfect": "You're my definition of perfect",
+    "You're my joy": "You bring me endless joy",
+    "You're so sweet": "Sweetness is your middle name",
+    "You're my dream": "You're the dream I've always had",
+    "You're my heart": "You have my heart completely",
+    "You're my destiny": "You're my destined love",
+    "You're my treasure": "You're the most precious treasure",
+    "You're the one": "You're the one I've been searching for",
+    "You're so special": "You're truly special to me",
+    "You're my happiness": "My happiness begins with you",
+    "You're amazing": "You're incredibly amazing",
+    "You're my reason": "You're the reason I believe in love",
+    "You're my universe": "You're my entire universe",
+    "You're incredible": "You're absolutely incredible",
+    "You're my angel": "You're my guardian angel",
+    "You're my sunshine": "You're the sunshine of my life",
+    "You're perfect": "You're my definition of perfect",
+    "You're my joy": "You bring me endless joy",
+    "You're so sweet": "Sweetness is your middle name",
+    "You're my dream": "You're the dream I've always had",
+    "You're my heart": "You have my heart completely",
+    "You're my destiny": "You're my destined love",
+    "You're my treasure": "You're the most precious treasure",
+    "You're the one": "You're the one I've been searching for",
+    "You're so special": "You're truly special to me",
+    "You're my happiness": "My happiness begins with you",
+    "You're amazing": "You're incredibly amazing",
+    "You're my reason": "You're the reason I believe in love",
+    "You're my universe": "You're my entire universe",
+    "You're incredible": "You're absolutely incredible",
+    "You're my angel": "You're my guardian angel",
+    "You're my sunshine": "You're the sunshine of my life",
+    "You're perfect": "You're my definition of perfect",
+    "You're my joy": "You bring me endless joy",
+    "You're so sweet": "Sweetness is your middle name",
+    "You're my dream": "You're the dream I've always had",
+    "You're my heart": "You have my heart completely",
+    "You're my destiny": "You're my destined love",
+    "You're my treasure": "You're the most precious treasure",
+    "You're the one": "You're the one I've been searching for",
+    "You're so special": "You're truly special to me",
+    "You're my happiness": "My happiness begins with you",
+    "You're amazing": "You're incredibly amazing",
+    "You're my reason": "You're the reason I believe in love",
+    "You're my universe": "You're my entire universe",
+    "You're incredible": "You're absolutely incredible",
+    "You're my angel": "You're my guardian angel",
+    "You're my sunshine": "You're the sunshine of my life",
+    "You're perfect": "You're my definition of perfect",
+    "You're my joy": "You bring me endless joy",
+    "You're so sweet": "Sweetness is your middle name",
+    "You're my dream": "You're the dream I've always had",
+    "You're my heart": "You have my heart completely",
+    "You're my destiny": "You're my destined love",
+    "You're my treasure": "You're the most precious treasure",
+    "You're the one": "You're the one I've been searching for",
+    "You're so special": "You're truly special to me",
+    "You're my happiness": "My happiness begins with you",
+	
+
+               };
+
+        function sendMessage() {
+            const inputField = document.querySelector(".input-field");
+            const messageText = inputField.value;
+
+            if (messageText) {
+                addMessage("You", messageText, true);
+                getChatbotResponse(messageText.toLowerCase()); // Convert to lowercase
+                inputField.value = "";
+            }
+        }
+
+        function addMessage(sender, text, isUser = false) {
+            const chatContainer = document.querySelector(".chat-container");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message");
+            if (isUser) {
+                messageDiv.classList.add("you");
+            } else {
+                messageDiv.classList.add("eva");
+            }
+            messageDiv.textContent = `${sender}: ${text}`;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function getChatbotResponse(userInput) {
+            const botResponse = responses[userInput];
+            if (botResponse) {
+                addMessage("Eva", botResponse, false);
+            } else {
+                notUnderstood();
+            }
+        }
+
+        function notUnderstood() {
+            addMessage("Eva", "I'm sorry, I don't know how to respond to that.", false);
+        }
+    </script>
+</body>
+</html>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<hr>
+
