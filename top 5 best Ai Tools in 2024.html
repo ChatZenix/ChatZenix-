@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(to bottom, #0d1b2a, #364156); /* Mixed sky and dark theme background */
+            color: #ffffff;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            background: black; /* Black background for the navigation bar */
+            color: #ffffff;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .navbar .logo {
+            font-size: 24px; /* Smaller font for the logo */
+            cursor: pointer;
+        }
+
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: none;
+        }
+
+        .navbar li {
+            margin: 0 20px;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .navbar-button {
+            font-size: 36px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .navbar-button:hover + ul {
+            display: flex;
+            transition: opacity 0.5s;
+        }
+
+        .parallax {
+            background-color: rgba(0, 0, 0, 0.7);
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .parallax h2 {
+            font-size: 36px;
+        }
+
+        .content {
+            text-align: center;
+            padding: 20px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 18px;
+            background: linear-gradient(to right, #3498db, #364156); /* Mixed sky and dark theme colors for the main paragraph page */
+            border-radius: 5px;
+            padding: 10px;
+            color: black; /* Text color for the main paragraph */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="navbar-button" onclick="toggleNavbar()">☰</div>
+        <ul>
+            <li><a href="https://chatzenix.github.io/ChatZenix-/">HOME</a></li>
+            <li><a href="#">BLOG</a></li>
+            <li><a href="https://chatzenix.github.io/ChatZenix-/about.html">ABOUT</a></li>
+        </ul>
+    </div>
+
+    <div class="parallax">
+        <h1>Top 5 Best Free AI Chatting Tools in 2024</h1>
+        <h3>
+
+AI chatbots have become an integral part of modern websites and customer support systems. They provide instant responses, assist users, and enhance user experiences. In 2023, several free AI chatting tools are making waves with their impressive capabilities and features. Let's explore the top 5 free AI chatting tools that are leading the way.
+</h3>
+
+<p><h3>AI Chatting Tool 1 - ChatGPT:</h3> Our first standout is ChatGPT, a creation of OpenAI. This versatile chatbot can engage users in natural conversations, offering businesses an excellent tool for automating customer support and engaging with website visitors.</p>
+<img src="chatgpt.jpg" width="150" height="120" alt="Img">
+
+<br>
+<br>
+<p><h3>AI Chatting Tool 2 - Dialogflow:</h3> Developed by Google, Dialogflow is a popular platform for chatbot development, featuring an array of integration options and robust natural language processing (NLP) capabilities. It's a top choice for businesses across diverse applications. </p>
+<br>
+<br>
+<p><h3>AI Chatting Tool 3 - IBM Watson Assistant:</h3> Enter IBM Watson Assistant, a powerhouse in AI chatbot solutions. Offering advanced AI capabilities and strong natural language understanding, it's a compelling choice for businesses seeking sophisticated chatbot functionality. </p>
+<br>
+<br>
+<p><h3>AI Chatting Tool 4 - Botsify:</h3> "Botsify stands out as a user-friendly chatbot platform that enables businesses to create chatbots without the need for coding. This makes it an excellent option for small businesses and startups looking to quickly implement chatbots. </p>
+<img src="botsify.jpg" width="120" height="120 alt="img">
+<br>
+<br>
+<p><h3>Google BERT Tool 5:</h3> A Language Revolution Google BERT, introduced in 2019, is an NLP model that transformed how search engines understand language. It enables search engines to grasp context and user intent, making search results more accurate and user-friendly. BERT reads text bidirectionally, providing a smarter, more context-aware search experience.</p>
+
+
+
+
+
+
+
+     </div>
+    
+
+    <script>
+        // Function to toggle the navbar
+        function toggleNavbar() {
+            const navbar = document.querySelector('.navbar ul');
+            navbar.style.display = (navbar.style.display === 'flex' || navbar.style.display === '') ? 'none' : 'flex';
+        }
+    </script>
+</body>
+</html>
